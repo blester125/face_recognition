@@ -1,0 +1,11 @@
+train/*
+*.pyc
+*.jpg
+openface/*
+openface
+shape_predictor_68_face_landmarks.dat 
+nn4.small2.v1.t7 
+model.pkl 
+LabelEncoder.pkl 
+data.csv 
+Anomaly.pkl
