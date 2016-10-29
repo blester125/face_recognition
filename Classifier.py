@@ -28,10 +28,10 @@ class Classifier():
 							"Walt": (0, 255, 0),
 							"Vicki": (255, 255, 0),
 							"Unknown": (0, 0, 255),
-							"will": (45, 200, 150),
+							"Will": (45, 200, 150),
 							"Chad": (255, 0, 0),
 							"Jimmy": (233, 250, 254),
-							#"Dave": (0, 255, 0)
+							"Dave": (0, 255, 0)
 						 }
 		self.data = None
 		self.labels = None

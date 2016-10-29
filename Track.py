@@ -58,21 +58,10 @@ def main():
 
 def classify_from_disk(fc, filename):
 	image = mpimg.imread(filename)
-	#faces = fc.classify_faces(image, True)
-	faces = fc.face_detector.detect_faces(image)	
-	j = 0	
+	faces = fc.classify_faces(image, True)
 	for face in faces:
-		points = fc.face_detector.find_landmarks(image, face)
-		if j % 2 == 0:
-			Draw.add_eyes(image, points)
-			Draw.add_fangs(image, points)
-			Draw.add_blood(image, points)
-		else:
-			Draw.add_frank(image, points)
-			Draw.add_bolts(image, points)
-		j += 1
-		#fc.draw_face(image, face.get_rectangle(), face.get_color())
-		#fc.drawer.draw_label(image, face.get_label(), face.get_rectangle(), face.get_color()) 
+		fc.draw_face(image, face.get_rectangle(), face.get_color())
+		fc.drawer.draw_label(image, face.get_label(), face.get_rectangle(), face.get_color()) 
 	plt.imshow(image)
 	plt.show()
 
@@ -142,16 +131,24 @@ def display_feature(fc, landmarks=False, mustache=False, eyes=False, save=False)
 			points = fc.face_detector.find_landmarks(frame, face)
 			if landmarks == True:
 				Draw.draw_points(frame, points, (0, 0, 0))
+				cv2.imwrite("landmarks.png", frame)
+				exit()
 			if mustache == True:
 				Draw.add_mustache(frame, points)
+				cv2.imwrite("mustache.png", frame)
+				exit()
 			if eyes == True:
-				if j % 2 != 0:
+				if j % 2 == 0:
 					Draw.add_eyes(frame, points)
 					Draw.add_fangs(frame, points)
 					Draw.add_blood(frame, points)
+					cv2.imwrite("vampire.png", frame)
+					exit()
 				else:
 					Draw.add_frank(frame, points)
 					Draw.add_bolts(frame, points)
+					cv2.imwrite("frankenstein.png", frame)
+					exit()
 			j += 1
 
 		cv2.imshow('Video', frame)

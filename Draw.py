@@ -125,6 +125,8 @@ def add_mustache(image, points):
 	] = scaled
 	return image
 
+##
+# Halloween Code
 def add_eyes(image, points):
 	LEFT_EYE = [36, 37, 38, 39, 40, 41]
 	RIGHT_EYE = [42, 43, 44, 45, 46, 47]
@@ -161,15 +163,15 @@ def add_fangs(image, points):
 def add_frank(image, points):
 	width = int(points[16][0] - points[0][0])
 	height = int(width * 400 / 640)
-	frank = cv2.imread("frank.png")
+	frank = cv2.imread("halloween/frank.png")
 	scaled = resize(frank, height, width)
 	frank_range = (points[19][1] - (points[19][1] - height))
 	image[(points[19][1] - height):points[19][1],points[0][0]:points[0][0]+width] = scaled
 	return image
 
 def add_bolts(image, points):
-	hor = cv2.imread("hor.png")
-	vert = cv2.imread("vert.png")
+	hor = cv2.imread("halloween/hor.png")
+	vert = cv2.imread("halloween/vert.png")
 	shorter = points[11][1] - points[12][1]
 	longer = int(shorter * 640 / 400)
 	scaled_hor = resize(hor, shorter, longer)
