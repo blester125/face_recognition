@@ -11,6 +11,7 @@ import Draw
 
 def main():
 	fc = Faces.Face_Classifier()
+	fc.train()
 	print("1. Classify faces from the webcam")
 	print("2. Classify faces from an image")
 	print("3. Add training data with the webcam")
@@ -36,6 +37,7 @@ def main():
 		print("2: Display Landmarks")
 		print("3: Add Mustache")
 		print("4: Both 2 and 3")
+		print("5: Halloween")
 		user_input = raw_input("Please make a selection: ")
 		save = False
 		if int(user_input) != 1:
@@ -48,16 +50,29 @@ def main():
 			display_feature(fc, mustache=True, save=save)
 		elif int(user_input) == 4:
 			display_feature(fc, landmarks=True, mustache=True, save=save)
+		elif int(user_input) == 5:
+			display_feature(fc, eyes=True, save=save)
 	else:
 		print("No valid selection. Exiting.")
 
 
 def classify_from_disk(fc, filename):
 	image = mpimg.imread(filename)
-	faces = fc.classify_faces(image, True)
+	#faces = fc.classify_faces(image, True)
+	faces = fc.face_detector.detect_faces(image)	
+	j = 0	
 	for face in faces:
-		fc.draw_face(image, face.get_rectangle(), face.get_color())
-		fc.drawer.draw_label(image, face.get_label(), face.get_rectangle(), face.get_color()) 
+		points = fc.face_detector.find_landmarks(image, face)
+		if j % 2 == 0:
+			Draw.add_eyes(image, points)
+			Draw.add_fangs(image, points)
+			Draw.add_blood(image, points)
+		else:
+			Draw.add_frank(image, points)
+			Draw.add_bolts(image, points)
+		j += 1
+		#fc.draw_face(image, face.get_rectangle(), face.get_color())
+		#fc.drawer.draw_label(image, face.get_label(), face.get_rectangle(), face.get_color()) 
 	plt.imshow(image)
 	plt.show()
 
@@ -108,7 +123,7 @@ def classify_from_camera(fc, train, label, save=False):
 		out.release()
 	cv2.destroyAllWindows()
 
-def display_feature(fc, landmarks=False, mustache=False, save=False):
+def display_feature(fc, landmarks=False, mustache=False, eyes=False, save=False):
 	video_cap = cv2.VideoCapture(0)
 	detected_faces = []
 	##
@@ -122,12 +137,22 @@ def display_feature(fc, landmarks=False, mustache=False, save=False):
 		if i % 5 == 0:
 			i = 0
 			detected_faces = fc.face_detector.detect_faces(frame)
+		j = 0
 		for face in detected_faces:
 			points = fc.face_detector.find_landmarks(frame, face)
 			if landmarks == True:
 				Draw.draw_points(frame, points, (0, 0, 0))
 			if mustache == True:
 				Draw.add_mustache(frame, points)
+			if eyes == True:
+				if j % 2 != 0:
+					Draw.add_eyes(frame, points)
+					Draw.add_fangs(frame, points)
+					Draw.add_blood(frame, points)
+				else:
+					Draw.add_frank(frame, points)
+					Draw.add_bolts(frame, points)
+			j += 1
 
 		cv2.imshow('Video', frame)
 		##

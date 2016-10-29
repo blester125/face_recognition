@@ -9,3 +9,4 @@ model.pkl
 LabelEncoder.pkl 
 data.csv 
 Anomaly.pkl
+test/*

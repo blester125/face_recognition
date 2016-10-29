@@ -30,7 +30,8 @@ class Classifier():
 							"Unknown": (0, 0, 255),
 							"will": (45, 200, 150),
 							"Chad": (255, 0, 0),
-							"Jimmy": (233, 250, 254)
+							"Jimmy": (233, 250, 254),
+							#"Dave": (0, 255, 0)
 						 }
 		self.data = None
 		self.labels = None
@@ -107,10 +108,10 @@ class Classifier():
 		label_num = self.infer(sample)
 		label = self.get_label(label_num)
 		anomaly_label = self.check_anomaly(label[0], sample)
-		if anomaly_label[0] > 0:
-			return label[0]
-		else:
-			return "Unknown"
+		#if anomaly_label[0] > 0:
+		#	return label[0]
+		#else:
+		#	return "Unknown"
 		return label[0]
 
 	def infer(self, sample):

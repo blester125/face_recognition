@@ -124,3 +124,65 @@ def add_mustache(image, points):
 		:
 	] = scaled
 	return image
+
+def add_eyes(image, points):
+	LEFT_EYE = [36, 37, 38, 39, 40, 41]
+	RIGHT_EYE = [42, 43, 44, 45, 46, 47]
+	pts = [points[x] for x in LEFT_EYE]
+	pts = np.array(pts)
+	cv2.fillPoly(image, [pts], (255, 255, 255))
+	pts = [points[x] for x in RIGHT_EYE]
+	pts = np.array(pts)
+	cv2.fillPoly(image, [pts], (255, 255, 255))
+	return image
+
+def add_blood(image, points):
+	LEFT_EYE = [48, 60, 7]
+	RIGHT_EYE = [54, 64, 9]
+	pts = [points[x] for x in LEFT_EYE]
+	pts = np.array(pts)
+	cv2.fillPoly(image, [pts], (0, 0, 255))
+	#pts = [points[x] for x in RIGHT_EYE]
+	#pts = np.array(pts)
+	#cv2.fillPoly(image, [pts], (0, 0, 255))
+	return image
+
+def add_fangs(image, points):
+	LEFT_EYE = [49, 50, 59]
+	RIGHT_EYE = [53, 52, 55]
+	pts = [points[x] for x in LEFT_EYE]
+	pts = np.array(pts)
+	cv2.fillPoly(image, [pts], (255, 255, 255))
+	pts = [points[x] for x in RIGHT_EYE]
+	pts = np.array(pts)
+	cv2.fillPoly(image, [pts], (255, 255, 255))
+	return image
+
+def add_frank(image, points):
+	width = int(points[16][0] - points[0][0])
+	height = int(width * 400 / 640)
+	frank = cv2.imread("frank.png")
+	scaled = resize(frank, height, width)
+	frank_range = (points[19][1] - (points[19][1] - height))
+	image[(points[19][1] - height):points[19][1],points[0][0]:points[0][0]+width] = scaled
+	return image
+
+def add_bolts(image, points):
+	hor = cv2.imread("hor.png")
+	vert = cv2.imread("vert.png")
+	shorter = points[11][1] - points[12][1]
+	longer = int(shorter * 640 / 400)
+	scaled_hor = resize(hor, shorter, longer)
+	scaled_block = resize(vert, shorter, shorter)
+	# Right
+	image[(points[9][1] - shorter):points[9][1],points[11][0]:points[11][0]+longer] = scaled_hor
+	image[(points[9][1] - shorter - shorter):(points[9][1] - shorter),points[11][0]+longer:points[11][0]+longer+shorter] = scaled_block
+	image[(points[9][1] - shorter):(points[9][1]),points[11][0]+longer:points[11][0]+longer+shorter] = scaled_block
+	image[(points[9][1]):(points[9][1] + shorter),points[11][0]+longer:points[11][0]+longer+shorter] = scaled_block
+	# Left
+	image[(points[7][1] - shorter):points[7][1],points[5][0]-longer:points[5][0]] = scaled_hor
+	image[(points[7][1] - shorter - shorter):(points[7][1] - shorter),points[5][0]-longer-shorter:points[5][0]-longer] = scaled_block
+	image[(points[7][1] - shorter):(points[7][1]),points[5][0]-longer-shorter:points[5][0]-longer] = scaled_block
+	image[(points[7][1]):(points[7][1] + shorter),points[5][0]-longer-shorter:points[5][0]-longer] = scaled_block
+	return image
+
